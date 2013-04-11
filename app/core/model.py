@@ -1,6 +1,10 @@
 from peewee import *
-from modules import db
+from app import db
 
 class User(db.Model):
-    message = TextField()
-    created = DateTimeField(default=datetime.datetime.now)
+    id = PrimaryKeyField()
+    username = TextField()
+    password = TextField()
+    
+    def authenticate(self):
+        pass
