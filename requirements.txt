@@ -1,1 +1,4 @@
 Flask>=0.9
+flask-bootstrap
+peewee==2.1.0
+flask-peewee==0.6.4
