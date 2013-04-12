@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template
-
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+import form
+from peewee import DoesNotExist
+from app.core.model import User
 register = Blueprint('core', __name__,
                      template_folder='templates')
 
@@ -8,6 +10,30 @@ register = Blueprint('core', __name__,
 def index():
     return render_template('index.html')
 
-@register.route('/login')
+@register.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    login_form = form.LoginForm()
+    if request.method == 'POST':
+        try:
+            user = User().authenticate(request.form['field_username'], request.form['field_password'])
+            session['logged_in'] = True
+            session['id'] = user.id
+            session['username'] = user.username
+            return redirect('/')
+        except DoesNotExist:
+            flash('Invalid username or password', 'error')
+        
+        #flash('You were logged in')
+        
+    return render_template('login.html', form=login_form)
+
+@register.route('/logout')
+def logout():
+    try:
+        session.pop('logged_in')
+        session.pop('id')
+        session.pop('username')
+    except:
+        return redirect('/login')
+    
+    return redirect('/login')

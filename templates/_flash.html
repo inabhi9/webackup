@@ -1,0 +1,12 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+		{% for category, message in messages %}
+			{% if category == 'success' %} {% set cat_class="alert-success" %} {% endif %}
+			{% if category == 'error' %} {% set cat_class="alert-error" %} {% endif %} 
+			<div class="alert {{cat_class}}">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
