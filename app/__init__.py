@@ -14,7 +14,7 @@ DEBUG = True
 SECRET_KEY = 'ssshhhh'
 CSRF_ENABLED = False
 APP_DIR = 'app'
-
+BOOTSTRAP_JQUERY_VERSION = None
 SOURCES = []; DESTINATIONS = []
 
 
@@ -45,13 +45,7 @@ for module in dirs:
     """ Blueprints """
     try:
         if module.startswith('__'): continue
-        webackup.register_blueprint(import_string(APP_DIR + '.source' + module + '.controller.register'))
-    except ImportError, e:
-        pass
-        
-    try:
-        if module.startswith('__'): continue
-        webackup.register_blueprint(import_string(APP_DIR + '.source.' + module + '.controller.register'))
+        webackup.register_blueprint(import_string(APP_DIR + '.source.' + module + '.controller.register'), url_prefix='/source')
     except ImportError, e:
         pass
     
@@ -67,16 +61,10 @@ for module in dirs:
     """ Blueprints """
     try:
         if module.startswith('__'): continue
-        webackup.register_blueprint(import_string(APP_DIR + '.destination' + module + '.controller.register'))
+        webackup.register_blueprint(import_string(APP_DIR + '.destination.' + module + '.controller.register'), url_prefix='/destination')
     except ImportError, e:
         pass
         
-    try:
-        if module.startswith('__'): continue
-        webackup.register_blueprint(import_string(APP_DIR + '.destination.' + module + '.controller.register'))
-    except ImportError, e:
-        pass
-    
     """ Populate supported destinations """
     try:
         t = import_string(APP_DIR + '.destination.' + module + '.info')

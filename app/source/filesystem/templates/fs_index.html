@@ -1,0 +1,17 @@
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+{% include 'ajax_base.html' %}
+
+<div class='elements'>
+	<form class="form-signin" method="POST">
+		{{ wtf.form_errors(form, "only") }}
+		{{form.field_path(placeholder="Enter local directory path")}} 
+	</form>
+</div>
+
+<hr />
+<button class="btn btn-inverse btn-testconfig" type="submit">Test config</button>
+<button class="btn btn-back" type="button" id='src_back_btn'>Back</button>
+
+{% endblock %}
