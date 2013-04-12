@@ -2,6 +2,26 @@
 
 {% set active_page = "index" %}
 
+{% block favicons %}
+<style type="text/css">
+div.items {
+	float : left;
+	height : 70px;
+	width : 70px;
+	margin: 0px 10px 10px 0px;
+	overflow: hidden;
+	text-align: center;
+}
+div.item img{
+	
+}
+.thumbnail{
+	overflow: hidden;
+	height: 500px;
+}
+
+</style>
+{% endblock %}
 
 {% block content %}
 
@@ -9,20 +29,26 @@
 	<ul class="thumbnails">
 		<li class="span4">
 			<div class="thumbnail">
-				<div class="caption">
+				<div class="caption" id="source_container">
 					<h3>Choose Source</h3>
-					<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-						Donec id elit non mi porta gravida at eget metus. Nullam id dolor
-						id nibh ultricies vehicula ut id elit.</p>
-					<p>
+					<hr />
+					{% for source in sources %}
+					<div class="items img-rounded img-polaroid">
+						<a href="{{source.config_url}}">
+							<img src="{{source.icon}}" style="width: auto; height: 70px;" title="{{source.title}}">
+						</a>
+					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</li>
 		<li class="span4">
-			<div class="thumbnail">
+			<div class="thumbnail" style="height: 350px">
 				<div class="caption">
 					<h3>Options</h3>
-					<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+					<hr />
+					<p>
+						Cras justo odio, dapibus ac facilisis in, egestas eget quam.
 						Donec id elit non mi porta gravida at eget metus. Nullam id dolor
 						id nibh ultricies vehicula ut id elit.
 					</p>
@@ -33,15 +59,20 @@
 			<div class="thumbnail">
 				<div class="caption">
 					<h3>Choose Destination</h3>
-					<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-						Donec id elit non mi porta gravida at eget metus. Nullam id dolor
-						id nibh ultricies vehicula ut id elit.
-					</p>
+					<hr />
+					{% for destination in destinations %}
+					<div class="items img-rounded img-polaroid">
+						<a href="destination">
+							<img src="{{destination.icon}}" style="width: 70px; height: 70px;" title="{{destination.title}}">
+						</a>
+					</div>
+					{% endfor %}
 				</div>
 			</div>
 		</li>
 	</ul>
 </div>
 
-<button type="button" class="btn btn-success btn-large">Save Profile</button>
+<div style="text-align:center"><button type="button" class="btn btn-success btn-large">Save Profile</button></div>
+
 {% endblock %}

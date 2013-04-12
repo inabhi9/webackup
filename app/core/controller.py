@@ -2,13 +2,14 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 import form
 from peewee import DoesNotExist
 from app.core.model import User
+from app import SOURCES, DESTINATIONS
 register = Blueprint('core', __name__,
                      template_folder='templates')
 
 
 @register.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', sources=SOURCES, destinations=DESTINATIONS)
 
 @register.route('/login', methods=['GET', 'POST'])
 def login():
