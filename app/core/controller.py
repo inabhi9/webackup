@@ -47,5 +47,5 @@ def lists():
     if request.args.get('type') == 'source':
         return render_template('_source_list.html', sources=SOURCES)
     elif request.args.get('type') == 'destination':
-        return render_template('_destination_list.html', sources=DESTINATIONS)
+        return render_template('_destination_list.html', destinations=DESTINATIONS)
 

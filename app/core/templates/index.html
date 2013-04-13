@@ -54,15 +54,11 @@ div.item img{
 		<li class="span4">
 			<div class="thumbnail">
 				<div class="caption">
-					<h3>Choose Destination</h3>
+					<h3  id='dst_title'>Choose Destination</h3>
 					<hr />
-					{% for destination in destinations %}
-					<div class="items img-rounded img-polaroid">
-						<a href="destination">
-							<img src="{{destination.icon}}" style="width: 70px; height: 70px;" title="{{destination.title}}">
-						</a>
+					<div id="destination_container">
+						{% include '_destination_list.html' %}
 					</div>
-					{% endfor %}
 				</div>
 			</div>
 		</li>
@@ -74,13 +70,24 @@ div.item img{
 <script>
 $(document).ready(function(){
 	$(document).on('click', '.src_dst_object', function(){
-		$("#src_title").html($(this).attr('title'));
-		$("#source_container").load($(this).attr('data-url'));
+		$container = $(this).attr('data-container');
+		if ($container == 'source_container'){
+			$("#src_title").html($(this).attr('title'));
+		}
+		else if ($container == 'destination_container'){
+			$("#dst_title").html($(this).attr('title'));
+		}
+		$("#"+$container).load($(this).attr('data-url'));
 	});
 	
 	$(document).on('click', '#src_back_btn', function(){
 		$("#src_title").html('Choose Source');
 		$("#source_container").load('/core/list?type=source');
+	});
+	
+	$(document).on('click', '#dst_back_btn', function(){
+		$("#dest_title").html('Choose Destination');
+		$("#destination_container").load('/core/list?type=destination');
 	});
 	
 	$('#btn_save_profile').click(function(){
