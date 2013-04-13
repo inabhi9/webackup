@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, ValidationError,\
+from flask.ext.wtf import Form, TextField, ValidationError, \
                           Required, PasswordField
                           
                           
