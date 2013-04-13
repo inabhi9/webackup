@@ -3,6 +3,7 @@ class SourceAction(object):
     
     def __init__(self, **kwargs):
         for k, v in kwargs.iteritems():
+            if isinstance(v, list) and len(v) == 1: v = v[0]
             self.__setattr__(k, v)
     
     def auth(self, **kwargs):

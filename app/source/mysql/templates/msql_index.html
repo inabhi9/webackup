@@ -6,7 +6,11 @@
 <div class='elements'>
 	<form class="form-signin" method="POST" id='src_conf_form'>
 		{{ wtf.form_errors(form, "only") }}
-		{{form.src_fs_path(placeholder="Enter local directory path")}} 
+		{{form.src_msql_host(placeholder="Host")}}
+		{{form.src_msql_port(placeholder="Port")}}
+		{{form.src_msql_db(placeholder="Database")}} 
+		{{form.src_msql_username(placeholder="Username")}}
+		{{form.src_msql_password(placeholder="Password")}}
 	</form>
 </div>
 

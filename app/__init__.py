@@ -51,6 +51,7 @@ for module in dirs:
         if module.startswith('__'): continue
         webackup.register_blueprint(import_string(APP_DIR + '.source.' + module + '.controller.register'), url_prefix='/source')
     except ImportError, e:
+        print e
         pass
     
     """ Populate supported sources"""
