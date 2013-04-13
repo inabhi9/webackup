@@ -8,25 +8,13 @@
 		{{ wtf.form_errors(form, "only") }}
 		{{form.src_fs_path(placeholder="Enter local directory path")}} 
 	</form>
+	
+	<div id='alert-display'></div>
 </div>
 
 <hr />
 <button class="btn btn-inverse btn-testconfig" type="button" id='bnt_test_config'>Test config</button>
 <button class="btn btn-back" type="button" id='src_back_btn'>Back</button>
 
-<script>
-$("#bnt_test_config").on("click", function(event){
-	event.preventDefault();
-	$data = $('#src_conf_form').serialize();
-	$.ajax({
-	  url: "{{test_url}}",
-	  data: $data,
-	  type: 'POST',
-	  success: function(resp){
-		  alert('asdf');
-	  }
-	})
-});
-</script>
-
+{% include '_src_common.html' %}
 {% endblock %}

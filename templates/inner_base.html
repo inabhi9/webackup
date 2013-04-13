@@ -12,6 +12,7 @@
 
 {% block body_content %}
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://malsup.github.io/jquery.blockUI.js"></script>
 	<div class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
 			<div class="container">
@@ -44,4 +45,30 @@
 		</footer>
 	</div>
 	<!-- /container -->
+	
+	<script type="text/javascript">
+	function showAlert(type, message, selector){
+		html = '<div class="alert alert-'+type+'"> \
+					<button type="button" class="close" data-dismiss="alert">×</button> \
+					'+message+' \
+				</div>';
+		$(selector).html(html);
+	}
+	function blockPage(){
+		$.blockUI({ 
+            message: "<h2><img src='/static/img/ajax-loader.gif' />&nbsp;&nbsp;Please wait...</h2>", 
+            css: { 
+                border: 'none',
+                backgroundColor: '#fff', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                color: '#000' 
+            } 
+        });
+	}
+	$(document).ready(function(){
+        $(document).ajaxStart(blockPage);
+		$(document).ajaxStop($.unblockUI); 
+	})
+	</script>
 {% endblock %}

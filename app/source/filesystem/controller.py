@@ -17,4 +17,9 @@ def index():
 @register.route('/filesystem/testconfig.json', methods=['POST'])
 def test_config():
     result = SourceAct(**request.form).test_config()
-    return resp_format.from_dict(resp_format.MSG_OK, data={'result' : result})
+    if result==True:
+        msg='Directory is exist and accessible'
+        return resp_format.from_dict(resp_format.MSG_OK, msg=msg)
+    if result==False:
+        msg='Directory does not exist or accessible'
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=msg)

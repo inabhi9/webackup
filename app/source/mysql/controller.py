@@ -20,4 +20,10 @@ def index():
 @register.route('/mysql/testconfig.json', methods=['POST'])
 def test_config():
     result = SourceAct(**request.form).test_config()
+    if result==True:
+        msg='Database connection successful!'
+        return resp_format.from_dict(resp_format.MSG_OK, msg=msg)
+    if result==False:
+        msg='Database could not be connected'
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=msg)
     return resp_format.from_dict(resp_format.MSG_OK, data={'result' : result})
