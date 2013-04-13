@@ -3,7 +3,7 @@ from flask import Flask, g
 from werkzeug.utils import import_string
 from flask_peewee.db import Database
 from flask.ext.bootstrap import Bootstrap
-
+from flask.ext.login import LoginManager
 
 # configure our database
 DATABASE = {
@@ -28,6 +28,10 @@ Bootstrap(webackup)
 
 # instantiate the db wrapper
 db = Database(webackup)
+
+# instatiate the login
+login_manager = LoginManager()
+login_manager.setup_app(webackup)
 
 """ Registering the blueprint controller """
 dirs = os.listdir(APP_DIR)
