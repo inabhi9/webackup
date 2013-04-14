@@ -1,0 +1,2 @@
+class TestConfigException(Exception):
+    pass
