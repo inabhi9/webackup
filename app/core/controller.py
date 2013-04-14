@@ -39,7 +39,11 @@ def logout():
 @register.route('/')
 @login_required
 def index():
-    return render_template('index.html', sources=SOURCES, destinations=DESTINATIONS)
+    form_opt = form.OptionForm()
+    return render_template('index.html',
+                           sources=SOURCES,
+                           destinations=DESTINATIONS,
+                           form_opt=form_opt)
 
 @register.route('/core/list')
 @login_required
