@@ -6,14 +6,14 @@
 <div class='elements'>
 	<form class="form-signin" method="POST" id='src_conf_form'>
 		{{ wtf.form_errors(form, "only") }}
-		{{form.src_fs_path(placeholder="Enter local directory path")}} 
+		{{form.src_ex_fs_path(placeholder="Enter local directory path")}} 
 	</form>
 	
-	<div id='alert-display'></div>
+	<div id='src-alert-display'></div>
 </div>
 
 <hr />
-<button class="btn btn-inverse btn-testconfig" type="button" id='bnt_test_config'>Test config</button>
+<button class="btn btn-inverse btn-testconfig" type="button" id='bnt_src_test_config'>Test config</button>
 <button class="btn btn-back" type="button" id='src_back_btn'>Back</button>
 
 {% include '_src_common.html' %}

@@ -6,4 +6,4 @@ Form element variable name should be start with 'src_'
 """
     
 class SettingForm(Form):   
-    src_fs_path = TextField('Path', validators=[Required()])
+    src_ex_fs_path = TextField('Path', validators=[Required()])

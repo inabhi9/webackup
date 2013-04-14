@@ -52,7 +52,6 @@ for module in dirs:
         webackup.register_blueprint(import_string(APP_DIR + '.source.' + module + '.controller.register'), url_prefix='/source')
     except ImportError, e:
         print e
-        pass
     
     """ Populate supported sources"""
     try:
@@ -75,4 +74,5 @@ for module in dirs:
         t = import_string(APP_DIR + '.destination.' + module + '.info')
         DESTINATIONS.append(t)
     except ImportError, e:
+        print e
         pass

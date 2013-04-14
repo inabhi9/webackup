@@ -1,5 +1,5 @@
 <script>
-$("#bnt_test_config").on("click", function(event){
+$("#bnt_src_test_config").on("click", function(event){
 	event.preventDefault();
 	$data = $('#src_conf_form').serialize();
 	$.ajax({
@@ -9,7 +9,7 @@ $("#bnt_test_config").on("click", function(event){
 	  type: 'POST',
 	  success: function(resp){
 		  status = resp.payload.status;
-		  showAlert(resp.payload.status, resp.payload.msg, '#alert-display');
+		  showAlert(resp.payload.status, resp.payload.msg, '#src-alert-display');
 	  }
 	})
 });

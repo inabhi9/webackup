@@ -1,6 +1,6 @@
 {% for source in sources %}
 <div class="items img-rounded img-polaroid">
-	<a href="javascript:void(0)" data-url="{{source.config_url}}" data-container='source_container' class='src_dst_object' title="{{source.title}}">
+	<a href="javascript:void(0)" data-url="{{source.config_url}}" data-provider="{{source.id}}"  data-container='source_container' class='src_dst_object' title="{{source.title}}">
 		<img src="{{source.icon}}" style="width: auto; height: 70px;">
 	</a>
 </div>

@@ -6,8 +6,8 @@ Form element variable name should be start with 'dst_'
 """
     
 class SettingForm(Form):   
-    dst_ftp_path = TextField('Path', validators=[Required()])
-    dst_ftp_host = TextField('Path', validators=[Required()])
-    dst_ftp_port = TextField('Path', validators=[Required()], default=21)
-    dst_ftp_username = TextField('Path', validators=[Required()])
-    dst_ftp_password = TextField('Path', validators=[Required()])
+    dst_ex_path = TextField('Path', validators=[Required()])
+    dst_host = TextField('Path', validators=[Required()])
+    dst_port = TextField('Path', validators=[Required()], default=21)
+    dst_username = TextField('Path', validators=[Required()])
+    dst_password = TextField('Path', validators=[Required()])

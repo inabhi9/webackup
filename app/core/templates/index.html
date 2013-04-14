@@ -48,6 +48,7 @@ div.item img{
 					</div>
 				</div>
 			</div>
+			<div id='alert-display' style="margin-top:10px"></div>
 		</li>
 		<li class="span4">
 			<div class="thumbnail destination_container">
@@ -64,35 +65,59 @@ div.item img{
 </div>
 
 <div style="text-align:center"><button type="button" class="btn btn-success btn-large" id='btn_save_profile'>Save Profile</button></div>
+<input type="hidden" id='src_provider' /> <input type="hidden" id='dst_provider' />
 
 <script>
 $(document).ready(function(){
 	$(document).on('click', '.src_dst_object', function(){
 		$container = $(this).attr('data-container');
+		$id = $(this).attr('data-provider');
 		if ($container == 'source_container'){
 			$("#src_title").html($(this).attr('title'));
 		}
 		else if ($container == 'destination_container'){
 			$("#dst_title").html($(this).attr('title'));
 		}
-		$("#"+$container).load($(this).attr('data-url'));
+		$("#"+$container).load($(this).attr('data-url'), function(){
+			if ($container == 'source_container'){
+				$('#src_provider').val($id);
+			}
+			else if ($container == 'destination_container'){
+				$('#dst_provider').val($id);
+			}
+		});
 	});
 	
 	$(document).on('click', '#src_back_btn', function(){
 		$("#src_title").html('Choose Source');
 		$("#source_container").load('/core/list?type=source');
+		$('#src_provider').val('');
 	});
 	
 	$(document).on('click', '#dst_back_btn', function(){
 		$("#dest_title").html('Choose Destination');
 		$("#destination_container").load('/core/list?type=destination');
+		$('#dst_provider').val('');
 	});
 	
 	$('#btn_save_profile').click(function(){
 		$data_src = $('#src_conf_form').serialize();
-		$data_dest = $('#dest_conf_form').serialize();
+		$data_dest = $('#dst_conf_form').serialize();
+		$data_opt = $('#opt_form').serialize();
 		
-		alert($data_src);
+		$dpd = $('#dst_provider').val();
+		$spd = $('#src_provider').val();
+		
+		$data = $data_src + "&" + $data_dest + "&dst_provider=" + $dpd + "&src_provider=" + $spd + "&" + $data_opt;
+		$.ajax({
+			url: "/profile",
+			data: $data,
+			dataType: 'json',
+			type: 'POST',
+			success: function(resp){
+				showAlert(resp.payload.status, resp.payload.msg, '#alert-display');
+			}
+		})
 	})
 });
 

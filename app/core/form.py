@@ -8,5 +8,5 @@ class LoginForm(Form):
     field_password = PasswordField('Password', validators=[Required()])
 
 class OptionForm(Form):
-    field_cron = TextField('Cron')
-    field_compress = BooleanField('Compress')
+    opt_cron = TextField('Cron')
+    opt_compress = BooleanField('Compress')

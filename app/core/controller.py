@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from flask.ext.login import login_user, login_required, logout_user
 import form
+from base import Error
+from lib import resp_format
 from peewee import DoesNotExist
-from app.core.model import User, UserAuth
+from app.core.model import User, UserAuth, Profile
 from app import SOURCES, DESTINATIONS, login_manager
 register = Blueprint('core', __name__,
                      template_folder='templates')
@@ -44,6 +46,24 @@ def index():
                            sources=SOURCES,
                            destinations=DESTINATIONS,
                            form_opt=form_opt)
+
+@register.route('/profile', methods=['POST'])
+@login_required
+def profile():
+    try:
+        s = {}; d ={}; o={}
+        for k, v in request.form.iteritems():
+            if k.startswith('src_'):
+                s[k] = v
+            elif k.startswith('dst_'):
+                d[k] = v
+            elif k.startswith('opt_'):
+                o[k] = v
+
+        Profile().save(s, d, o)
+        return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
+    except Error.ProfileException as e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
 
 @register.route('/core/list')
 @login_required
