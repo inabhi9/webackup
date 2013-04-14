@@ -1,4 +1,5 @@
 from app import db
+from peewee import *
 
 class BaseModel(db.Model):
     
@@ -13,7 +14,29 @@ class BaseModel(db.Model):
         pass
 
 class SourceModel(BaseModel):
-    pass
+    id = PrimaryKeyField()
+    u_id = IntegerField()
+    username = TextField() 
+    password = TextField()
+    host = TextField()
+    port = TextField()
+    extra = TextField()
+    title = TextField()
+    provider = TextField()
 
 class DestinationModel(BaseModel):
+    id = PrimaryKeyField()
+    u_id = IntegerField()
+    username = TextField() 
+    password = TextField()
+    host = TextField()
+    port = TextField()
+    extra = TextField()
+    title = TextField()
+    provider = TextField()
+
+class Source(SourceModel):
+    pass
+
+class Destination(DestinationModel):
     pass

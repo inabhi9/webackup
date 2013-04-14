@@ -34,4 +34,7 @@ class DestinationAction(object):
             self.__setattr__(k, v)
     
     def test_config(self):
-        raise NotImplementedError( "Should have implemented this" )
+        raise NotImplementedError( "Should have implemented this")
+    
+    def upload_file(self, file_name):
+        raise NotImplementedError( "Should have implemented this")

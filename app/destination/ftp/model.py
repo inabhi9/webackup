@@ -4,20 +4,11 @@ from base.Action import DestinationAction
 from base.Model import DestinationModel
 from base import Error
 from flask.ext.login import current_user
-import json
-
+import json, os
+from datetime import datetime
+ 
 class Destination(DestinationModel):
-    
-    id = PrimaryKeyField()
-    u_id = IntegerField()
-    username = TextField() 
-    password = TextField()
-    host = TextField()
-    port = TextField()
-    extra = TextField()
-    title = TextField()
-    provider = TextField()
-    
+        
     def save_conf(self):
         data = {}
         extra = {}
@@ -75,4 +66,17 @@ class DestinationAct(DestinationAction):
             raise Error.TestConfigException('"%s" directory is not writable' % self.dst_ex_path)
         finally:
             ftp.rmd(self.dst_ex_path + '/wr98494test')
+
+    def upload_file(self, file_name):
+        fnm, fext = os.path.splitext(file_name)
+        fnm = datetime.utcnow().strftime('webackup_%Y_%m_%d_%H-%M-%S')
+        if fext == '.gz': fext = '.tar.gz'
+        
+        ftp = FTP()
+        ftp.connect(host=self.host, port=int(self.port))
+        ftp.login(user=self.username, passwd=self.password)
+        ftp.cwd(self.extra['path'])
+        ftp.storbinary("STOR %s%s" % (fnm, fext), open(file_name, "rb"))
+        
+        os.unlink(file_name)
         

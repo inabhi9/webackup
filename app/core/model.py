@@ -1,10 +1,11 @@
 from peewee import *
 from app import db
 from werkzeug import import_string
-from base.Model import BaseModel
+from base.Model import BaseModel, Destination, Source
 from flask.ext.login import UserMixin
 from base import Error
 from flask.ext.login import current_user
+import json
 
 class UserAuth(UserMixin):
     def __init__(self, name, id, active=True):
@@ -36,7 +37,7 @@ class Profile(BaseModel):
     compress = IntegerField()
     title = TextField()
     
-    def save(self, source, destination, option):
+    def create(self, source, destination, option):
         """ Saving source """
         src_provider = source['src_provider'] + '.model.Source'
         try:
@@ -69,4 +70,38 @@ class Profile(BaseModel):
         data['schedule'] = option['opt_cron']
         data['compress'] = 1 if option['opt_compress'] == 'y' else 'n'
         q = Profile.insert(**data)
-        q.execute()
+        return q.execute()
+        
+    def retrieve(self, p_id):
+        profile = Profile.get(Profile.id==p_id)
+        p = profile._data
+        
+        sched = {}
+        c = profile.schedule.split(' ')
+        sched['minute'] = c[0]
+        sched['hour'] = c[1]
+        sched['day'] = c[2]
+        sched['month'] = c[3]
+        sched['day_of_week'] = c[4]
+        
+        s = Source.get(Source.id==profile.s_id)
+        s._data['extra'] = json.loads(s._data['extra'])
+        s = s._data
+        
+        d = Destination.get(Destination.id==profile.d_id)
+        d._data['extra'] = json.loads(d._data['extra'])
+        d = d._data
+        
+        return p, s, d, sched
+        
+class Backup:
+    
+    @staticmethod
+    def execute(source, destination, compress=True):
+        SourceAct = import_string(source.get('provider') + '.model.SourceAct')
+        src_act = SourceAct(**source)
+        file_name = src_act.dump_tar()
+        
+        DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
+        dst_act = DestinationAct(**destination)
+        result = dst_act.upload_file(file_name)

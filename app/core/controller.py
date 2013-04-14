@@ -4,8 +4,8 @@ import form
 from base import Error
 from lib import resp_format
 from peewee import DoesNotExist
-from app.core.model import User, UserAuth, Profile
-from app import SOURCES, DESTINATIONS, login_manager
+from model import User, UserAuth, Profile, Backup
+from app import SOURCES, DESTINATIONS, login_manager, sched
 register = Blueprint('core', __name__,
                      template_folder='templates')
 
@@ -60,7 +60,10 @@ def profile():
             elif k.startswith('opt_'):
                 o[k] = v
 
-        Profile().save(s, d, o)
+        p_id = Profile().create(s, d, o)
+        p, s, d, c = Profile().retrieve(p_id)
+        sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+        
         return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
     except Error.ProfileException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
@@ -73,3 +76,12 @@ def lists():
     elif request.args.get('type') == 'destination':
         return render_template('_destination_list.html', destinations=DESTINATIONS)
 
+@register.route('/core/dryrun')
+@login_required
+def dryrun():
+    p_id = 2
+    p, s, d, c = Profile().retrieve(2)
+    c['hour'] = '*'
+    c['minute'] = '*'
+    sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+    #sched.add_interval_job(lambda: Backup().execute(s, d), minutes=1)

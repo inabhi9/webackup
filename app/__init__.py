@@ -4,6 +4,7 @@ from werkzeug.utils import import_string
 from flask_peewee.db import Database
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
+from apscheduler.scheduler import Scheduler
 
 # configure our database
 DATABASE = {
@@ -32,6 +33,10 @@ db = Database(webackup)
 # instatiate the login
 login_manager = LoginManager()
 login_manager.setup_app(webackup)
+
+#initiate scheduler
+sched = Scheduler()
+sched.start()
 
 """ Registering the blueprint controller """
 dirs = os.listdir(APP_DIR)

@@ -4,20 +4,10 @@ from base.Action import SourceAction
 from base.Model import SourceModel
 from flask.ext.login import current_user
 from base import Error
-import json
-
+from lib import functions
+import json, tarfile
 
 class Source(SourceModel):
-    
-    id = PrimaryKeyField()
-    u_id = IntegerField()
-    username = TextField() 
-    password = TextField()
-    host = TextField()
-    port = TextField()
-    extra = TextField()
-    title = TextField()
-    provider = TextField()
     
     def save_conf(self):
         data = {}
@@ -47,3 +37,12 @@ class SourceAct(SourceAction):
         read permission to Application
         """
         return os.access(self.src_ex_fs_path, os.R_OK)
+    
+    def dump_tar(self):
+        fpath = "/tmp/wb_%s.tar.gz" % functions.id_generator(10)
+        
+        tar = tarfile.open(fpath, "w:gz")
+        tar.add(self.extra['fs_path'])
+        tar.close()
+        
+        return fpath
