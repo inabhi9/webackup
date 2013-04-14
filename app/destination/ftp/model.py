@@ -13,7 +13,7 @@ class DestinationAct(DestinationAction):
         read permission to Application
         """
         ftp = FTP()
-        if not self.dst_ftp_path: self.dst_ftp_path = '/rwerwerwe'
+        if not self.dst_ftp_path: self.dst_ftp_path = '/'
         
         """ Testing connection """
         try:
@@ -35,10 +35,10 @@ class DestinationAct(DestinationAction):
         
         """ Testing write permission """
         try:
-            ftp.mkd(self.dst_ftp_path + '/wrtest98494')
+            ftp.mkd(self.dst_ftp_path + '/wr98494test')
         except error_perm, e:
             if str(e)=="550 Target exist.": return
             raise Error.TestConfigException('"%s" directory is not writable' % self.dst_ftp_path)
         finally:
-            ftp.rmd(self.dst_ftp_path + '/wrtest98494')
+            ftp.rmd(self.dst_ftp_path + '/wr98494test')
         
