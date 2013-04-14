@@ -1,0 +1,16 @@
+<script>
+$("#bnt_test_config").on("click", function(event){
+	event.preventDefault();
+	$data = $('#dst_conf_form').serialize();
+	$.ajax({
+	  url: "{{test_url}}",
+	  data: $data,
+	  dataType: 'json',
+	  type: 'POST',
+	  success: function(resp){
+		  status = resp.payload.status;
+		  showAlert(resp.payload.status, resp.payload.msg, '#dst-alert-display');
+	  }
+	})
+});
+</script>

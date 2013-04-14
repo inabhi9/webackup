@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from peewee import DoesNotExist
-from model import SourceAct
+from flask import Blueprint, render_template, request
+from model import DestinationAct
 from lib import resp_format
+from base import Error
 import form
 
 register = Blueprint('d_ftp', __name__,
@@ -13,9 +13,13 @@ def index():
     return render_template('dst_ftp_index.html',
                            form=setting_form,
                            title="File system",
-                           test_url = '/source/filesystem/testconfig.json')
+                           test_url = '/destination/ftp/testconfig.json')
 
 @register.route('/ftp/testconfig.json', methods=['POST'])
 def test_config():
-    result = SourceAct(**request.form).test_config()
-    return resp_format.from_dict(resp_format.MSG_OK, data={'result' : result})
+    try:
+        DestinationAct(**request.form).test_config()
+        msg='FTP connection successfully tested'
+        return resp_format.from_dict(resp_format.MSG_OK, msg=msg)
+    except Error.TestConfigException as e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))

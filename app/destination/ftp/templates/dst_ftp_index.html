@@ -4,7 +4,7 @@
 {% include 'ajax_base.html' %}
 
 <div class='elements'>
-	<form class="form-signin" method="POST" id='src_conf_form'>
+	<form class="form-signin" method="POST" id='dst_conf_form'>
 		{{ wtf.form_errors(form, "only") }}
 		{{form.dst_ftp_path(placeholder="Enter path to store backup file")}}
 		{{form.dst_ftp_host(placeholder="Host")}}
@@ -12,25 +12,13 @@
 		{{form.dst_ftp_username(placeholder="Username")}}
 		{{form.dst_ftp_password(placeholder="password")}} 
 	</form>
+	
+	<div id='dst-alert-display'></div>
 </div>
 
 <hr />
 <button class="btn btn-inverse btn-testconfig" type="button" id='bnt_test_config'>Test config</button>
 <button class="btn btn-back" type="button" id='dst_back_btn'>Back</button>
 
-<script>
-$("#bnt_test_config").on("click", function(event){
-	event.preventDefault();
-	$data = $('#src_conf_form').serialize();
-	$.ajax({
-	  url: "{{test_url}}",
-	  data: $data,
-	  type: 'POST',
-	  success: function(resp){
-		  alert('asdf');
-	  }
-	})
-});
-</script>
-
+{% include '_dst_common.html' %}
 {% endblock %}
