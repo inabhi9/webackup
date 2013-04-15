@@ -14,7 +14,7 @@ def from_dict(status, data=None, err=None, fmt='json', httpcode=200, msg=None, *
     resp.update(**kwargs)
     
     '''Managin HTTP status code'''
-    #if request.args.get('suppress_http_code', '').lower() == 'true':
+    # if request.args.get('suppress_http_code', '').lower() == 'true':
     resp['http_status_code'] = httpcode
     resp['http_code_msg'] = HTTP_CODE_MSG[httpcode]
     httpcode = 200

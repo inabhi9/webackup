@@ -34,7 +34,7 @@ db = Database(webackup)
 login_manager = LoginManager()
 login_manager.setup_app(webackup)
 
-#initiate scheduler
+# initiate scheduler
 sched = Scheduler()
 sched.start()
 

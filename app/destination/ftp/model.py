@@ -46,7 +46,7 @@ class DestinationAct(DestinationAction):
         
         """ Testing connection """
         try:
-            print ftp.connect(host=self.dst_host, port=int(self.dst_port))
+            ftp.connect(host=self.dst_host, port=int(self.dst_port))
         except:
             raise Error.TestConfigException('Could not connect to server')
         
@@ -58,7 +58,7 @@ class DestinationAct(DestinationAction):
         
         """ Testing path """
         try:
-            print ftp.cwd(self.dst_ex_path)
+            ftp.cwd(self.dst_ex_path)
         except:
             raise Error.TestConfigException('"%s" directory does not exists' % self.dst_ex_path)
         
@@ -66,7 +66,7 @@ class DestinationAct(DestinationAction):
         try:
             ftp.mkd(self.dst_ex_path + '/wr98494test')
         except error_perm, e:
-            if str(e)=="550 Target exist.": return
+            if str(e) == "550 Target exist.": return
             raise Error.TestConfigException('"%s" directory is not writable' % self.dst_ex_path)
         finally:
             ftp.rmd(self.dst_ex_path + '/wr98494test')

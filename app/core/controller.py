@@ -51,7 +51,7 @@ def index():
 @login_required
 def profile():
     try:
-        s = {}; d ={}; o={}
+        s = {}; d = {}; o = {}
         for k, v in request.form.iteritems():
             if k.startswith('src_'):
                 s[k] = v
@@ -62,7 +62,7 @@ def profile():
 
         p_id = Profile().create(s, d, o)
         p, s, d, c = Profile().retrieve(p_id)
-        #sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+        # sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
         
         return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
     except Error.ProfileException as e:
@@ -85,5 +85,5 @@ def dryrun():
     p, s, d, c = Profile().retrieve(2)
     c['hour'] = '*'
     c['minute'] = '*'
-    #sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
-    #sched.add_interval_job(lambda: Backup().execute(s, d), minutes=1)
+    # sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+    # sched.add_interval_job(lambda: Backup().execute(s, d), minutes=1)

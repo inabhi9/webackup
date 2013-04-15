@@ -13,13 +13,13 @@ def index():
     return render_template('dst_ftp_index.html',
                            form=setting_form,
                            title="File system",
-                           test_url = '/destination/ftp/testconfig.json')
+                           test_url='/destination/ftp/testconfig.json')
 
 @register.route('/ftp/testconfig.json', methods=['POST'])
 def test_config():
     try:
         DestinationAct(**request.form).test_config()
-        msg='FTP connection successfully tested'
+        msg = 'FTP connection successfully tested'
         return resp_format.from_dict(resp_format.MSG_OK, msg=msg)
     except Error.TestConfigException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))

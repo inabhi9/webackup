@@ -85,7 +85,7 @@ class Profile(BaseModel):
         return q.execute()
         
     def retrieve(self, p_id):
-        profile = Profile.get(Profile.id==p_id)
+        profile = Profile.get(Profile.id == p_id)
         p = profile._data
         
         sched = {}
@@ -96,11 +96,11 @@ class Profile(BaseModel):
         sched['month'] = c[3]
         sched['day_of_week'] = c[4]
         
-        s = Source.get(Source.id==profile.s_id)
+        s = Source.get(Source.id == profile.s_id)
         s._data['extra'] = json.loads(s._data['extra'])
         s = s._data
         
-        d = Destination.get(Destination.id==profile.d_id)
+        d = Destination.get(Destination.id == profile.d_id)
         d._data['extra'] = json.loads(d._data['extra'])
         d = d._data
         
