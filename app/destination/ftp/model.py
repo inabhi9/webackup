@@ -41,7 +41,8 @@ class DestinationAct(DestinationAction):
         read permission to Application
         """
         ftp = FTP()
-        if not self.dst_ex_path: self.dst_ex_path = '/'
+        if not self.dst_ex_path:
+            raise Error.TestConfigException('Path to store cannot be blank')
         
         """ Testing connection """
         try:
