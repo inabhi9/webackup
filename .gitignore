@@ -38,4 +38,5 @@ nosetests.xml
 
 #database
 database.db
+scheduler.db
 /__test.py

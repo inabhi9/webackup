@@ -1,0 +1,22 @@
+{% extends "inner_base.html" %}
+
+{% set active_page = "profile" %}
+
+
+{% block content %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Title</th>
+			<th>Schedule</th>
+			<th>Status</th>
+			<th>Last executed</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% include '_profiles.html' %}
+	</tbody>
+</table>
+{% endblock %}

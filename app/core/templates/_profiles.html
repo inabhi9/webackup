@@ -1,0 +1,23 @@
+{% for profile in profiles %}
+	{% if profile.status == 1 %}
+		{% set cls="success" %}
+		{% set lbl="Active" %}
+		{% set actPP = '<a href="#"><i class="icon-pause"></i>Pause</a>' %}
+	{% endif %}
+	{% if profile.status == 0 %}
+		{% set cls="warning" %}
+		{% set lbl="Deactive" %}
+		{% set actPP = '<a href="#"><i class="icon-play"></i>ReActive</a>' %}
+	{% endif %}
+	<tr id="row_{{profile.id}}">
+		<td>{{profile.id}}</td>
+		<td>{{profile.title}}</td>
+		<td>{{profile.cron}}</td>
+		<td><span class="label label-{{cls}}">{{lbl}}</span></td>
+		<td>Never</td>
+		<td>
+			<a href="#"><i class="icon-trash"></i>Delete</a>
+			{{actPP|safe}}
+		</td>
+	</tr>
+{% endfor %}

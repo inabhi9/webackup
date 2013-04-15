@@ -83,7 +83,28 @@ class Profile(BaseModel):
         q = Profile.insert(**data)
         return q.execute()
         
-    def retrieve(self, p_id):
+    def retrieve(self, **kwargs):
+        jobs = kwargs.get('jobs', [])
+        jobs_dict = {}
+        for j in jobs:
+            jobs_dict[j.name.replace('wj_', '')] = j
+
+        u_id = current_user.id
+        
+        sq = Profile.select().where(Profile.u_id==u_id)
+        qr = sq.execute()
+        
+        data = []
+        for r in qr:
+            if jobs_dict.get(str(r.id)):
+                r._data['status'] = 1
+            else:
+                r._data['status'] = 0
+            data.append(r._data)
+            
+        return data
+    
+    def find_by_pk(self, p_id):
         profile = Profile.get(Profile.id == p_id)
         p = profile._data
         
@@ -105,14 +126,13 @@ class Profile(BaseModel):
         
         return p, s, d, sched
         
-class Backup:
+
+
+def profile_execute(profile, source, destination, compress=True):
+    SourceAct = import_string(source.get('provider') + '.model.SourceAct')
+    src_act = SourceAct(**source)
+    file_name = src_act.dump_tar()
     
-    @staticmethod
-    def execute(source, destination, compress=True):
-        SourceAct = import_string(source.get('provider') + '.model.SourceAct')
-        src_act = SourceAct(**source)
-        file_name = src_act.dump_tar()
-        
-        DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
-        dst_act = DestinationAct(**destination)
-        result = dst_act.upload_file(file_name)
+    DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
+    dst_act = DestinationAct(**destination)
+    result = dst_act.upload_file(file_name)

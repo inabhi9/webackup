@@ -4,8 +4,9 @@ import form
 from base import Error
 from lib import resp_format
 from peewee import DoesNotExist
-from model import User, UserAuth, Profile, Backup
+from model import User, UserAuth, Profile, profile_execute
 from app import SOURCES, DESTINATIONS, login_manager, sched
+
 register = Blueprint('core', __name__,
                      template_folder='templates')
 
@@ -47,9 +48,12 @@ def index():
                            destinations=DESTINATIONS,
                            form_opt=form_opt)
 
-@register.route('/profile', methods=['POST'])
+@register.route('/profile', methods=['POST', 'GET'])
 @login_required
 def profile():
+    if request.method == 'GET':
+        return profile_list()
+    
     try:
         s = {}; d = {}; o = {}
         for k, v in request.form.iteritems():
@@ -61,14 +65,21 @@ def profile():
                 o[k] = v
 
         p_id = Profile().create(s, d, o)
-        p, s, d, c = Profile().retrieve(p_id)
-        # sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+        p, s, d, c = Profile().find_by_pk(p_id)
+        sched.add_cron_job(profile_execute, args=[p, s, d], name='wj_%s' % p_id, **c)
         
         return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
     except Error.ProfileException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
     except Error.TestConfigException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
+
+def profile_list():
+    data = Profile().retrieve(jobs=sched.get_jobs())
+    return render_template('profile.html', profiles=data)
+
+def delete_profile():
+    pass
 
 @register.route('/core/list')
 @login_required
@@ -82,8 +93,8 @@ def lists():
 @login_required
 def dryrun():
     p_id = 2
-    p, s, d, c = Profile().retrieve(2)
+    p, s, d, c = Profile().find_by_pk(2)
     c['hour'] = '*'
     c['minute'] = '*'
-    # sched.add_cron_job(Backup.execute, args=[s, d], name='wj_%s' % p_id ,**c)
+    # sched.add_cron_job(Backup.execute, args=[p, s, d], name='wj_%s' % p_id ,**c)
     # sched.add_interval_job(lambda: Backup().execute(s, d), minutes=1)

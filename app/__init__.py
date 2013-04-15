@@ -5,6 +5,7 @@ from flask_peewee.db import Database
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
 from apscheduler.scheduler import Scheduler
+from apscheduler.jobstores.shelve_store import ShelveJobStore
 
 # configure our database
 DATABASE = {
@@ -36,6 +37,7 @@ login_manager.setup_app(webackup)
 
 # initiate scheduler
 sched = Scheduler()
+sched.add_jobstore(ShelveJobStore('data/scheduler.db'), 'default')
 sched.start()
 
 """ Registering the blueprint controller """
@@ -56,7 +58,7 @@ for module in dirs:
         if module.startswith('__'): continue
         webackup.register_blueprint(import_string(APP_DIR + '.source.' + module + '.controller.register'), url_prefix='/source')
     except ImportError, e:
-        print e
+        pass
     
     """ Populate supported sources"""
     try:
@@ -79,5 +81,4 @@ for module in dirs:
         t = import_string(APP_DIR + '.destination.' + module + '.info')
         DESTINATIONS.append(t)
     except ImportError, e:
-        print e
         pass
