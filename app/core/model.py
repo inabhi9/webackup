@@ -37,7 +37,6 @@ class Profile(BaseModel):
     title = TextField()
     email_notify = IntegerField()
     compress = IntegerField()
-    title = TextField()
     
     def create(self, source, destination, option):
         
