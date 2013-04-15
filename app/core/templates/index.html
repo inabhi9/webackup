@@ -69,7 +69,7 @@ div.item img{
 	<button type="button" class="btn btn-success btn-large" id='btn_save_profile'>Save Profile</button>
 	<button type="button" class="btn btn-info btn-large" id='btn_testrun_profile'>Test Run</button>
 </div>
-
+<div id='afd'></div>
 <div id='src_objs' style="display:none">
 {% include '_source_list.html' %}
 </div>
@@ -82,6 +82,13 @@ div.item img{
 
 <script>
 $(document).ready(function(){
+	$('#cron_selection').cron({
+		initial: "0 0 * * 0",
+	    onChange: function() {
+	        $('#opt_cron').val($(this).cron("value"));
+	    }
+	});
+	
 	$(document).on('click', '.src_dst_object', function(){
 		$container = $(this).attr('data-container');
 		$id = $(this).attr('data-provider');
