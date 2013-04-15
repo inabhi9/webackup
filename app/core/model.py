@@ -33,7 +33,9 @@ class Profile(BaseModel):
     u_id = TextField()
     s_id = IntegerField()
     d_id = IntegerField()
-    schedule = TextField()
+    cron = TextField()
+    title = TextField()
+    email_notify = IntegerField()
     compress = IntegerField()
     title = TextField()
     
@@ -67,8 +69,14 @@ class Profile(BaseModel):
         data['u_id'] = current_user.id
         data['s_id'] = s_id
         data['d_id'] = d_id
-        data['schedule'] = option['opt_cron']
-        data['compress'] = 1 if option['opt_compress'] == 'y' else 'n'
+
+        for k, v in option.iteritems():
+            data[k.replace('opt_', '')] = v
+        
+        
+        data['compress'] = 1 if 'opt_compress' in option else 0
+        data['email_notify'] = 1 if 'opt_email_notify' in option else 0
+        
         q = Profile.insert(**data)
         return q.execute()
         
@@ -77,7 +85,7 @@ class Profile(BaseModel):
         p = profile._data
         
         sched = {}
-        c = profile.schedule.split(' ')
+        c = profile.cron.split(' ')
         sched['minute'] = c[0]
         sched['hour'] = c[1]
         sched['day'] = c[2]

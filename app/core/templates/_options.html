@@ -1,6 +1,8 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 <form class="form-signin" method="POST" id='opt_form'>
-	{{wtf.inline_field(form_opt.opt_cron)}} <br />
-	{{wtf.inline_field(form_opt.opt_compress, style="margin-top:0px")}}&nbsp;<span>Archive (tar zipped before transfer)</span>
+	{{wtf.inline_field(form_opt.opt_title, style="width: 96%")}} <br />
+	{{wtf.inline_field(form_opt.opt_cron)}} <br /> <br />
+	{{wtf.inline_field(form_opt.opt_compress, style="margin-top:0px")}}&nbsp;<span>Archive (tar zipped before transfer)</span> <br /><br />
+	{{wtf.inline_field(form_opt.opt_email_notify, style="margin-top:0px")}}&nbsp;<span>Email notification</span>
 </form>
