@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 import form
 from app.source.filesystem.model import SourceAct
 from lib import resp_format
+from base import Error
 
 register = Blueprint('s_filesystem', __name__,
                      template_folder='templates')
@@ -16,10 +17,9 @@ def index():
 
 @register.route('/filesystem/testconfig.json', methods=['POST'])
 def test_config():
-    result = SourceAct(**request.form).test_config()
-    if result==True:
-        msg='Directory is exist and accessible'
+    try:
+        SourceAct(**request.form).test_config()
+        msg='Directory exists and accessible'
         return resp_format.from_dict(resp_format.MSG_OK, msg=msg)
-    if result==False:
-        msg='Directory does not exist or accessible'
-        return resp_format.from_dict(resp_format.MSG_FAIL, msg=msg)
+    except Error.TestConfigException as e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))

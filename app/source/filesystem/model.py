@@ -9,9 +9,13 @@ import json, tarfile
 
 class Source(SourceModel):
     
+    def validate(self):
+        SourceAct(**dict(self.__dict__)).test_config()
+    
     def save_conf(self):
         data = {}
         extra = {}
+        
         for k, v in dict(self.__dict__).iteritems():
             if k.startswith('src_ex_'):
                 extra[k.replace('src_ex_', '')] = v
@@ -36,7 +40,10 @@ class SourceAct(SourceAction):
         Check whether the path user gave has 
         read permission to Application
         """
-        return os.access(self.src_ex_fs_path, os.R_OK)
+        result = os.access(self.src_ex_fs_path, os.R_OK)
+        if result == False:
+            raise Error.TestConfigException('Directory does not exist or not accessible')
+        return result
     
     def dump_tar(self):
         fpath = "/tmp/wb_%s.tar.gz" % functions.id_generator(10)
