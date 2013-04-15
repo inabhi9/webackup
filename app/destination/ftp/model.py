@@ -9,6 +9,9 @@ from datetime import datetime
  
 class Destination(DestinationModel):
         
+    def validate(self):
+        DestinationAct(**dict(self.__dict__)).test_config()    
+    
     def save_conf(self):
         data = {}
         extra = {}

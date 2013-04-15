@@ -67,6 +67,8 @@ def profile():
         return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
     except Error.ProfileException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
+    except Error.TestConfigException as e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
 
 @register.route('/core/list')
 @login_required

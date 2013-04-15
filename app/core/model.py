@@ -40,28 +40,33 @@ class Profile(BaseModel):
     title = TextField()
     
     def create(self, source, destination, option):
-        """ Saving source """
+        
+        """ Selecting source """
         src_provider = source['src_provider'] + '.model.Source'
         try:
             Source = import_string(src_provider)
+            src = Source(**source)
         except ValueError:
             raise Error.ProfileException('No source selected')
         except ImportError:
             raise Error.ProfileException('Invalid source')
         
-        src = Source(**source)
-        s_id = src.save_conf()
-        
-        """ Saving destination """
+        """ Selecting destination """
         dst_provider = destination['dst_provider'] + '.model.Destination'
         try:
             Destination = import_string(dst_provider)
+            dst = Destination(**destination)
         except ValueError:
-            raise Error.ProfileException('No source selected')
+            raise Error.ProfileException('No destination selected')
         except ImportError:
             raise Error.ProfileException('Invalid Destination')
         
-        dst = Destination(**destination)
+        """ Validation """
+        src.validate()
+        dst.validate()
+        
+        """ Saving """
+        s_id = src.save_conf()
         d_id = dst.save_conf()
         
         """ Creating a profile """
@@ -72,7 +77,6 @@ class Profile(BaseModel):
 
         for k, v in option.iteritems():
             data[k.replace('opt_', '')] = v
-        
         
         data['compress'] = 1 if 'opt_compress' in option else 0
         data['email_notify'] = 1 if 'opt_email_notify' in option else 0
