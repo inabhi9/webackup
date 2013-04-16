@@ -1,0 +1,20 @@
+{% extends "inner_base.html" %}
+
+{% set active_page = "log" %}
+
+{% block content %}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Job id</th>
+			<th>Time</th>
+			<th>Status</th>
+			<th>Message</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% include '_log.html' %}
+	</tbody>
+</table>
+{% endblock %}
