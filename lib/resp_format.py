@@ -1,4 +1,3 @@
-from bson import json_util
 from flask import request, abort
 import json
 
@@ -22,7 +21,7 @@ def from_dict(status, data=None, err=None, fmt='json', httpcode=200, msg=None, *
     if httpcode == 400: abort(httpcode)
     
     '''Returning Response object'''
-    if fmt == 'json': return (json.dumps(resp, default=json_util.default), httpcode, {'Content-Type':JSON_CONTENT_TYPE})
+    if fmt == 'json': return (json.dumps(resp), httpcode, {'Content-Type':JSON_CONTENT_TYPE})
     
 MSG_FAIL = "error"
 MSG_OK = "success"
