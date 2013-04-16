@@ -78,8 +78,35 @@ def profile_list():
     data = Profile().retrieve(jobs=sched.get_jobs())
     return render_template('profile.html', profiles=data)
 
-def delete_profile():
-    pass
+@register.route('/profile/do', methods=['GET'])
+@login_required
+def profil_actions():
+    act= request.args.get('act')
+    p_id = request.args.get('p_id')
+    try:
+        if act=='active':
+            p, s, d, c = Profile().find_by_pk(p_id)
+            sched.add_cron_job(profile_execute, args=[p, s, d], name='wj_%s' % p_id, **c)
+            return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully activated')
+        elif act=='pause':
+            unschedule_job(p_id)
+            return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully paused')
+        elif act=='delete':
+            unschedule_job(p_id)
+            Profile().delete_by_pk(p_id)
+            return resp_format.from_dict(resp_format.MSG_OK, msg='Profile hase been deleted')
+        
+    except Error.ProfileException as e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
+    except Exception, e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
+
+
+def unschedule_job(p_id):
+    for job in sched.get_jobs():
+        if job.name == 'wj_%s' % p_id:
+            sched.unschedule_job(job)
+            break
 
 @register.route('/core/list')
 @login_required

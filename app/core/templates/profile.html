@@ -4,6 +4,8 @@
 
 
 {% block content %}
+<div id='prof-alert-display'></div>
+
 <table class="table">
 	<thead>
 		<tr>
@@ -19,4 +21,62 @@
 		{% include '_profiles.html' %}
 	</tbody>
 </table>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$base_url = '/profile/do'
+	$(document).on('click', '.btn_prof_active', function(e){
+		e.preventDefault();
+		
+		$id = $(this).attr('data-id');
+		$this = $(this);
+		$data='act=active&p_id='+$id;
+		$.ajax({
+			url: $base_url,
+			data: $data,
+			dataType: 'json',
+			success: function(resp){
+				$($this).remove();
+				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn_prof_pause" id="btn_prof_pause_'+$id+'"><i class="icon-pause"></i>Pause</a>');
+				$('#row_status_'+$id).html('<span class="label label-success">Active</span>');
+				showAlert(resp.payload.status, resp.payload.msg, '#prof-alert-display');
+			}
+		})
+	});
+	
+	$(document).on('click', '.btn_prof_pause', function(e){
+		e.preventDefault();
+		$id = $(this).attr('data-id');
+		$this = $(this);
+		
+		$data='act=pause&p_id='+$id;
+		$.ajax({
+			url: $base_url,
+			data: $data,
+			dataType: 'json',
+			success: function(resp){
+				$($this).remove();
+				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn_prof_active" id="btn_prof_active_'+$id+'"><i class="icon-play"></i>ReActive</a>');
+				$('#row_status_'+$id).html('<span class="label label-warning">Deactive</span>');
+				showAlert(resp.payload.status, resp.payload.msg, '#prof-alert-display');
+			}
+		})
+	})
+	
+	$(document).on('click', '.btn_prof_delete', function(e){
+		e.preventDefault();
+		$id = $(this).attr('data-id');
+		$data='act=delete&p_id='+$id;
+		$.ajax({
+			url: $base_url,
+			data: $data,
+			dataType: 'json',
+			success: function(resp){
+				$('#row_'+$id).remove();
+				showAlert(resp.payload.status, resp.payload.msg, '#prof-alert-display');
+			}
+		})
+	})
+})
+</script>
 {% endblock %}

@@ -125,8 +125,15 @@ class Profile(BaseModel):
         d = d._data
         
         return p, s, d, sched
+    
+    def delete_by_pk(self, p_id):
+        profile = Profile.get(Profile.id == p_id)
+        source = Source.get(Source.id == profile.s_id)
+        destination = Destination.get(Destination.id==profile.d_id)
         
-
+        profile.delete_instance()
+        source.delete_instance()
+        destination.delete_instance()
 
 def profile_execute(profile, source, destination, compress=True):
     SourceAct = import_string(source.get('provider') + '.model.SourceAct')
