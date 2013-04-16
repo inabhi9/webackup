@@ -14,6 +14,10 @@ class BaseModel(db.Model):
         pass
 
 class SourceModel(BaseModel):
+    
+    class Meta:
+        db_table = "source"
+    
     id = PrimaryKeyField()
     u_id = IntegerField()
     username = TextField() 
@@ -25,6 +29,10 @@ class SourceModel(BaseModel):
     provider = TextField()
 
 class DestinationModel(BaseModel):
+    
+    class Meta:
+        db_table = "destination"
+    
     id = PrimaryKeyField()
     u_id = IntegerField()
     username = TextField() 
@@ -35,8 +43,15 @@ class DestinationModel(BaseModel):
     title = TextField()
     provider = TextField()
 
-class Source(SourceModel):
-    pass
+class EventlogModel(BaseModel):
+    
+    id  = PrimaryKeyField()
+    type = TextField()
+    text = TextField()
+    created_at = TextField()
+    j_id = IntegerField()
+    u_id = IntegerField()
+    event = TextField()
 
-class Destination(DestinationModel):
-    pass
+    class Meta:
+        db_table = "event_log"

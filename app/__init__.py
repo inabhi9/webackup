@@ -4,7 +4,7 @@ from werkzeug.utils import import_string
 from flask_peewee.db import Database
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
-from apscheduler.scheduler import Scheduler
+from apscheduler.scheduler import Scheduler, EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.jobstores.shelve_store import ShelveJobStore
 
 # configure our database
@@ -82,3 +82,6 @@ for module in dirs:
         DESTINATIONS.append(t)
     except ImportError, e:
         pass
+
+from core import aps_listener
+sched.add_listener(aps_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
