@@ -1,7 +1,7 @@
 from peewee import *
 from app import db
 from werkzeug import import_string
-from base.Model import BaseModel, Destination, Source
+from base.Model import BaseModel, DestinationModel, SourceModel, EventlogModel
 from flask.ext.login import UserMixin
 from base import Error
 from flask.ext.login import current_user
@@ -100,6 +100,14 @@ class Profile(BaseModel):
                 r._data['status'] = 1
             else:
                 r._data['status'] = 0
+            
+            try:    
+                qe = EventlogModel.select().where(EventlogModel.j_id==r._data['id']).order_by(EventlogModel.id.desc()).limit(1)
+                for res in qe.execute():
+                    r._data['last_execute'] = res._data['created_at']
+            except:
+                pass
+            
             data.append(r._data)
             
         return data
@@ -116,30 +124,59 @@ class Profile(BaseModel):
         sched['month'] = c[3]
         sched['day_of_week'] = c[4]
         
-        s = Source.get(Source.id == profile.s_id)
+        s = SourceModel.get(SourceModel.id == profile.s_id)
         s._data['extra'] = json.loads(s._data['extra'])
         s = s._data
         
-        d = Destination.get(Destination.id == profile.d_id)
+        d = DestinationModel.get(DestinationModel.id == profile.d_id)
         d._data['extra'] = json.loads(d._data['extra'])
         d = d._data
         
-        return p, s, d, sched
+        
+        return {'profile': p, 'source' : s, 'destination' : d, 'cron' : sched}
     
     def delete_by_pk(self, p_id):
         profile = Profile.get(Profile.id == p_id)
-        source = Source.get(Source.id == profile.s_id)
-        destination = Destination.get(Destination.id==profile.d_id)
+        source = SourceModel.get(SourceModel.id == profile.s_id)
+        destination = DestinationModel.get(DestinationModel.id==profile.d_id)
         
         profile.delete_instance()
         source.delete_instance()
         destination.delete_instance()
 
-def profile_execute(profile, source, destination, compress=True):
+
+class Eventlog(EventlogModel):
+    
+    def retrieve(self, **kwargs):
+        jobs = kwargs.get('jobs', [])
+        jobs_dict = {}
+        for j in jobs:
+            jobs_dict[j.name.replace('wj_', '')] = j
+    
+        u_id = current_user.id
+        
+        sq = EventlogModel.select().where(EventlogModel.u_id==u_id).order_by(EventlogModel.id.desc())
+        qr = sq.execute()
+        
+        data = []
+        for r in qr:
+            data.append(r._data)
+            
+        return data
+    
+
+def profile_execute(p_id):
+    data = Profile().find_by_pk(p_id)
+    source = data['source']
+    destination = data['destination']
+    data = data['profile']
+    
     SourceAct = import_string(source.get('provider') + '.model.SourceAct')
     src_act = SourceAct(**source)
     file_name = src_act.dump_tar()
     
     DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
     dst_act = DestinationAct(**destination)
-    result = dst_act.upload_file(file_name)
+    dst_act.upload_file(file_name)
+    
+    return data

@@ -14,7 +14,7 @@
 		<td>{{profile.title}}</td>
 		<td>{{profile.cron}}</td>
 		<td id="row_status_{{profile.id}}"><span class="label label-{{cls}}">{{lbl}}</span></td>
-		<td>Never</td>
+		<td>{% if profile.last_execute %} {{profile.last_execute}} {% else %} Never {% endif %}</td>
 		<td id='row_actions_{{profile.id}}'>
 			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn_prof_delete"><i class="icon-trash"></i>Delete</a>
 			{{actPP|safe}}

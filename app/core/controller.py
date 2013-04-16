@@ -4,8 +4,9 @@ import form
 from base import Error
 from lib import resp_format
 from peewee import DoesNotExist
-from model import User, UserAuth, Profile, profile_execute
+from model import User, UserAuth, Profile, profile_execute, Eventlog
 from app import SOURCES, DESTINATIONS, login_manager, sched
+
 
 register = Blueprint('core', __name__,
                      template_folder='templates')
@@ -65,8 +66,7 @@ def profile():
                 o[k] = v
 
         p_id = Profile().create(s, d, o)
-        p, s, d, c = Profile().find_by_pk(p_id)
-        sched.add_cron_job(profile_execute, args=[p, s, d], name='wj_%s' % p_id, **c)
+        schedule_job(p_id)
         
         return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully created')
     except Error.ProfileException as e:
@@ -85,8 +85,7 @@ def profil_actions():
     p_id = request.args.get('p_id')
     try:
         if act=='active':
-            p, s, d, c = Profile().find_by_pk(p_id)
-            sched.add_cron_job(profile_execute, args=[p, s, d], name='wj_%s' % p_id, **c)
+            schedule_job(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully activated')
         elif act=='pause':
             unschedule_job(p_id)
@@ -102,11 +101,21 @@ def profil_actions():
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
 
 
+def schedule_job(p_id):
+    p = Profile().find_by_pk(p_id)
+    c = p['cron']
+    sched.add_cron_job(profile_execute, args=[p_id], name='wj_%s' % p_id, **c)
+
 def unschedule_job(p_id):
     for job in sched.get_jobs():
         if job.name == 'wj_%s' % p_id:
             sched.unschedule_job(job)
             break
+
+@register.route('/log')
+@login_required
+def log():
+    return render_template('log.html', logs=Eventlog().retrieve())
 
 @register.route('/core/list')
 @login_required
@@ -115,13 +124,3 @@ def lists():
         return render_template('_source_list.html', sources=SOURCES)
     elif request.args.get('type') == 'destination':
         return render_template('_destination_list.html', destinations=DESTINATIONS)
-
-@register.route('/core/dryrun')
-@login_required
-def dryrun():
-    p_id = 2
-    p, s, d, c = Profile().find_by_pk(2)
-    c['hour'] = '*'
-    c['minute'] = '*'
-    # sched.add_cron_job(Backup.execute, args=[p, s, d], name='wj_%s' % p_id ,**c)
-    # sched.add_interval_job(lambda: Backup().execute(s, d), minutes=1)
