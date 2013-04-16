@@ -6,9 +6,9 @@
 		{% set cls="error" %}
 	{% endif %}
 	<tr>
-		<td width='80px'>{{log.j_id}}</td>
-		<td width='150px'>{{log.created_at}}</td>
-		<td  width='110px'><span class="label label-{{cls}}">{{log.type}}</span></td>
+		<td width='80px'>#{{log.j_id}}</td>
+		<td width='170px'>{{log.created_at}}</td>
+		<td  width='90px'><span class="label label-{{cls}}">{{log.type}}</span></td>
 		<td>{{log.text}}</td>
 	</tr>
 {% endfor %}

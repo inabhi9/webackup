@@ -4,15 +4,15 @@
 
 
 {% block content %}
+<h3>Manage Profiles</h3>
 <div id='prof-alert-display'></div>
-
 <table class="table">
 	<thead>
 		<tr>
 			<th>#</th>
 			<th>Title</th>
-			<th>Schedule</th>
 			<th>Status</th>
+			<th>Schedule</th>
 			<th>Last executed</th>
 			<th></th>
 		</tr>
@@ -37,7 +37,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			success: function(resp){
 				$($this).remove();
-				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn_prof_pause" id="btn_prof_pause_'+$id+'"><i class="icon-pause"></i>Pause</a>');
+				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn btn-inverse btn_prof_pause" id="btn_prof_pause_'+$id+'"><i class="icon-white icon-pause"></i> Pause</a>');
 				$('#row_status_'+$id).html('<span class="label label-success">Active</span>');
 				showAlert(resp.payload.status, resp.payload.msg, '#prof-alert-display');
 			}
@@ -56,7 +56,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			success: function(resp){
 				$($this).remove();
-				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn_prof_active" id="btn_prof_active_'+$id+'"><i class="icon-play"></i>ReActive</a>');
+				$('#row_actions_'+$id).append('<a href="javascript:void(0)" data-id="'+$id+'" class="btn btn-inverse btn_prof_active" id="btn_prof_active_'+$id+'"><i class="icon-white icon-play"></i> ReActive</a>');
 				$('#row_status_'+$id).html('<span class="label label-warning">Deactive</span>');
 				showAlert(resp.payload.status, resp.payload.msg, '#prof-alert-display');
 			}
