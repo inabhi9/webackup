@@ -3,3 +3,6 @@ class TestConfigException(Exception):
 
 class ProfileException(Exception):
     pass
+
+class ValidationException(Exception):
+    pass

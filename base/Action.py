@@ -1,3 +1,5 @@
+import Error
+
 
 class SourceAction(object):
     
@@ -23,7 +25,13 @@ class SourceAction(object):
     
     def ncftpput_string(self, **kwargs):
         pass
-
+    
+    def _validate(self, setting_form):
+        f = setting_form(**self.__dict__)
+        f.validate()
+        for field, errors in f.errors.items():
+            for error in errors:
+                raise Error.ValidationException("Error in the %s field - %s" % (getattr(f, field).label.text, error))
 
 
 class DestinationAction(object):

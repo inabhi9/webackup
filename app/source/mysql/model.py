@@ -1,8 +1,11 @@
 from base.Action import SourceAction
-from peewee import MySQLDatabase
+from base.Model import SourceModel
+import pymysql
+from base import Error
+from form import SettingForm
 
-"""class Source(base.Model.SourceModel):
-    pass"""
+class Source(SourceModel):
+    pass
 
 class SourceAct(SourceAction):
     
@@ -10,14 +13,15 @@ class SourceAct(SourceAction):
         """
         Check whether MySQL is connecatable
         """
+        self._validate(SettingForm)
         
-        mysql_db = MySQLDatabase(self.src_msql_db,
-                                 user=self.src_msql_username,
-                                 passwd=self.src_msql_password,
-                                 port=int(self.src_msql_port),
-                                 host=self.src_msql_host)
         try:
-            mysql_db.connect()
-            return True
+            con = pymysql.connect(
+                        db=self.src_db,
+                        user=self.src_username,
+                        passwd=self.src_password,
+                        port=int(self.src_port),
+                        host=self.src_host
+                    )
         except:
-            return False
+            raise Error.TestConfigException('Could not connect to MySQL server')

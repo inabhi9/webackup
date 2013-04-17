@@ -6,8 +6,8 @@ Form element variable name should be start with 'src_'
 """
     
 class SettingForm(Form):   
-    src_msql_host = TextField('Host', validators=[Required()])
-    src_msql_port = TextField('Port', validators=[Required()], default=3306)
-    src_msql_db = TextField('Database')
-    src_msql_username = TextField('Username', validators=[Required()])
-    src_msql_password = PasswordField('Password')
+    src_host = TextField('Host', validators=[Required()])
+    src_port = TextField('Port', validators=[Required()], default=3306)
+    src_db = TextField('Database')
+    src_username = TextField('Username', validators=[Required()])
+    src_password = PasswordField('Password')
