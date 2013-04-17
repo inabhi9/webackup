@@ -3,14 +3,15 @@
 {% set active_page = "log" %}
 
 {% block content %}
-<div style="float: left; width: 300px">
+<div style="float: left; width: 200px">
 	<h3>
 		Event log
 	</h3>
 </div>
 <div style="float:right; padding-top: 20px">
-	<button type="button" class="btn btn-danger"><i class="icon-remove icon-white"></i>&nbsp;Clear log</button>
+	<button type="button" class="btn btn-danger" id="clear_log"><i class="icon-remove icon-white"></i>&nbsp;Clear log</button>
 </div>
+<div id="alert-display" style="clear:both"></div>
 <table class="table">
 	<thead>
 		<tr>
@@ -20,8 +21,21 @@
 			<th>Message</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id="log_rows">
 		{% include '_log.html' %}
 	</tbody>
 </table>
+
+<script type="text/javascript">
+	$('#clear_log').click(function(){
+		$.ajax({
+			url: '/log/do?act=delete',
+			success: function(resp){
+				showAlert(resp.payload.status, resp.payload.msg, '#alert-display');
+				$('#log_rows').remove();
+			}
+		})
+	})
+</script>
+
 {% endblock %}

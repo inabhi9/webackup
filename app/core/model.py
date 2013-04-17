@@ -164,6 +164,9 @@ class Eventlog(EventlogModel):
             
         return data
     
+    def remove_all(self, u_id):
+        delete_query = EventlogModel.delete().where(EventlogModel.u_id == u_id)
+        delete_query.execute()
 
 def profile_execute(p_id):
     data = Profile().find_by_pk(p_id)

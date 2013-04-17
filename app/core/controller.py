@@ -6,6 +6,7 @@ from lib import resp_format
 from peewee import DoesNotExist
 from model import User, UserAuth, Profile, profile_execute, Eventlog
 from app import SOURCES, DESTINATIONS, login_manager, sched
+from flask_login import current_user
 
 
 register = Blueprint('core', __name__,
@@ -116,6 +117,17 @@ def unschedule_job(p_id):
 @login_required
 def log():
     return render_template('log.html', logs=Eventlog().retrieve())
+
+@register.route('/log/do')
+@login_required
+def log_action():
+    act= request.args.get('act')
+    try:
+        if act=='delete':
+            Eventlog().remove_all(current_user.id)
+            return resp_format.from_dict(resp_format.MSG_OK, msg='Log has been deleted')
+    except Exception, e:
+        return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
 
 @register.route('/core/list')
 @login_required
