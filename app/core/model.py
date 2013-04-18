@@ -6,6 +6,8 @@ from flask.ext.login import UserMixin
 from base import Error
 from flask.ext.login import current_user
 import json
+from lib import functions
+from datetime import datetime
 
 class UserAuth(UserMixin):
     def __init__(self, name, id, active=True):
@@ -174,12 +176,17 @@ def profile_execute(p_id):
     destination = data['destination']
     data = data['profile']
     
+    """ Dumping from Source """
     SourceAct = import_string(source.get('provider') + '.model.SourceAct')
     src_act = SourceAct(**source)
     file_name = src_act.dump_zipped()
     
+    """ Output file name """
+    out = 'wb_' + functions.clean_str(data['title']) + datetime.utcnow().strftime('%Y_%m_%d_%H-%M-%S') + functions.ext_file(file_name)
+    
+    """ Executing destination part  """
     DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
     dst_act = DestinationAct(**destination)
-    dst_act.upload_file(file_name)
+    dst_act.upload_file(file_name, out)
     
     return data

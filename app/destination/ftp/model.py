@@ -6,6 +6,7 @@ from base import Error
 from flask.ext.login import current_user
 import json, os
 from datetime import datetime
+from lib import functions
  
 class Destination(DestinationModel):
         
@@ -71,16 +72,12 @@ class DestinationAct(DestinationAction):
         finally:
             ftp.rmd(self.dst_ex_path + '/wr98494test')
 
-    def upload_file(self, file_name):
-        fnm, fext = os.path.splitext(file_name)
-        fnm = datetime.utcnow().strftime('webackup_%Y_%m_%d_%H-%M-%S')
-        if fext == '.gz': fext = '.tar.gz'
-        
+    def upload_file(self, input_file, out_file):       
         ftp = FTP()
         ftp.connect(host=self.host, port=int(self.port))
         ftp.login(user=self.username, passwd=self.password)
         ftp.cwd(self.extra['path'])
-        ftp.storbinary("STOR %s%s" % (fnm, fext), open(file_name, "rb"))
+        ftp.storbinary("STOR %s" % out_file, open(input_file, "rb"))
         
-        os.unlink(file_name)
+        os.unlink(input_file)
         
