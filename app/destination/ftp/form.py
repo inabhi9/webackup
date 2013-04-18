@@ -10,4 +10,4 @@ class SettingForm(Form):
     dst_host = TextField('Path', validators=[Required()])
     dst_port = TextField('Path', validators=[Required()], default=21)
     dst_username = TextField('Path', validators=[Required()])
-    dst_password = TextField('Path', validators=[Required()])
+    dst_password = PasswordField('Path', validators=[Required()])
