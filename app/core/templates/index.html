@@ -111,14 +111,12 @@ $(document).ready(function(){
 	
 	$(document).on('click', '#src_back_btn', function(){
 		$("#src_title").html('Choose Source');
-		//$("#source_container").load('/core/list?type=source');
 		$("#source_container").html($('#src_objs').html())
 		$('#src_provider').val('');
 	});
 	
 	$(document).on('click', '#dst_back_btn', function(){
 		$("#dest_title").html('Choose Destination');
-		//$("#destination_container").load('/core/list?type=destination');
 		$("#destination_container").html($('#dst_objs').html());
 		$('#dst_provider').val('');
 	});

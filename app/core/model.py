@@ -176,7 +176,7 @@ def profile_execute(p_id):
     
     SourceAct = import_string(source.get('provider') + '.model.SourceAct')
     src_act = SourceAct(**source)
-    file_name = src_act.dump_tar()
+    file_name = src_act.dump_zipped()
     
     DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
     dst_act = DestinationAct(**destination)

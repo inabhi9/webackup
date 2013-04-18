@@ -45,7 +45,7 @@ class SourceAct(SourceAction):
             raise Error.TestConfigException('Directory does not exist or not accessible')
         return result
     
-    def dump_tar(self):
+    def dump_zipped(self):
         fpath = "/tmp/wb_%s.tar.gz" % functions.id_generator(10)
         
         tar = tarfile.open(fpath, "w:gz")

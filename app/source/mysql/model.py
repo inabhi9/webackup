@@ -53,7 +53,7 @@ class SourceAct(SourceAction):
         except:
             raise Error.TestConfigException('Could not connect to MySQL server')
 
-    def dump_tar(self):
+    def dump_zipped(self):
         fpath = "/tmp/wb_%s.sql.gz" % functions.id_generator(10)
         
         db = '--databases '+self.extra['db'] if self.extra['db'] else '--all-databases'
