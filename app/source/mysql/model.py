@@ -57,10 +57,10 @@ class SourceAct(SourceAction):
         fpath = "/tmp/wb_%s.sql.gz" % functions.id_generator(10)
         
         db = '--databases '+self.extra['db'] if self.extra['db'] else '--all-databases'
-        passwd = "-p"+self.password if self.password else ''
+        passwd = "-p'"+self.password+"'" if self.password else ''
         cmd = "mysqldump --host %s --port=%s -u %s %s %s | gzip > %s" % (self.host, self.port, self.username, passwd, db, fpath)
         
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         """with gzip.open(fpath, "wb") as f:
             f.writelines(p.stdout)"""
 
