@@ -3,7 +3,7 @@ from base.Model import SourceModel
 import pymysql
 from base import Error
 from form import SettingForm
-import tarfile, subprocess, json, gzip
+import subprocess, json
 from flask.ext.login import current_user
 
 from lib import functions
@@ -58,10 +58,10 @@ class SourceAct(SourceAction):
         
         db = '--databases '+self.extra['db'] if self.extra['db'] else '--all-databases'
         passwd = "-p"+self.password if self.password else ''
-        cmd = "mysqldump --host %s --port=%s -u %s %s %s" % (self.host, self.port, self.username, passwd, db)
+        cmd = "mysqldump --host %s --port=%s -u %s %s %s | gzip > %s" % (self.host, self.port, self.username, passwd, db, fpath)
         
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        with gzip.open(fpath, "wb") as f:
-            f.writelines(p.stdout)
+        """with gzip.open(fpath, "wb") as f:
+            f.writelines(p.stdout)"""
 
         return fpath
