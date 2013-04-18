@@ -17,8 +17,9 @@
 		
 		<td>{% if profile.last_execute %} {{profile.last_execute}} {% else %} Never {% endif %}</td>
 		<td id='row_actions_{{profile.id}}'>
-			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn btn-danger btn_prof_delete"><i class="icon-trash icon-white"></i> Delete</a>
+			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn btn-primary btn_prof_run"><i class="icon-repeat icon-white"></i> Run</a>
 			{{actPP|safe}}
+			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn btn-danger btn_prof_delete"><i class="icon-trash icon-white"></i> Delete</a>
 		</td>
 	</tr>
 {% endfor %}
