@@ -95,6 +95,9 @@ def profil_actions():
             unschedule_job(p_id)
             Profile().delete_by_pk(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Profile hase been deleted')
+        elif act=='run':
+            profile_execute(p_id)
+            return resp_format.from_dict(resp_format.MSG_OK, msg='Job completed successfully')
         
     except Error.ProfileException as e:
         return resp_format.from_dict(resp_format.MSG_FAIL, msg=str(e))
