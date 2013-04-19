@@ -1,0 +1,25 @@
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+{% include 'ajax_base.html' %}
+
+<div class='elements'>
+	<form class="form-signin" method="POST" id='src_conf_form'>
+		{{form.src_host(placeholder="Host")}}
+		{{form.src_port(placeholder="Port")}}
+		{{form.src_ex_db(placeholder="Database")}}
+		{{form.src_ex_coll(placeholder="Collection")}}  
+		{{form.src_username(placeholder="Username")}}
+		{{form.src_password(placeholder="Password")}} <br /><br />
+		{{wtf.inline_field(form.src_ex_repairdb, style="margin-top:0px")}}&nbsp;<span>Repair database</span><br />
+		<small>If checked, database will be repaired before backing up</small>
+	</form>
+	<div id='src-alert-display'></div>
+</div>
+
+<hr />
+<button class="btn btn-inverse btn-testconfig" type="button" id='bnt_src_test_config'>Test config</button>
+<button class="btn btn-back" type="button" id='src_back_btn'>Back</button>
+
+{% include '_src_common.html' %}
+{% endblock %}
