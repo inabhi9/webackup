@@ -36,6 +36,13 @@ class Destination(DestinationModel):
 
 class DestinationAct(DestinationAction):
     
+    def __init__(self, **kwargs):
+        super(DestinationAct, self).__init__(**kwargs)
+        self.__ftp = FTP()
+        self.__ftp.connect(host=self.host, port=int(self.port))
+        self.__ftp.login(user=self.username, passwd=self.password)
+        self.__ftp.cwd(self.extra['path'])
+        
     def test_config(self):
         """
         Check whether the path user gave has 
@@ -73,11 +80,12 @@ class DestinationAct(DestinationAction):
             ftp.rmd(self.dst_ex_path + '/wr98494test')
 
     def upload_file(self, input_file, out_file):       
-        ftp = FTP()
-        ftp.connect(host=self.host, port=int(self.port))
-        ftp.login(user=self.username, passwd=self.password)
-        ftp.cwd(self.extra['path'])
-        ftp.storbinary("STOR %s" % out_file, open(input_file, "rb"))
+        self.__ftp.storbinary("STOR %s" % out_file, open(input_file, "rb"))
         
         os.unlink(input_file)
         
+    def mkdir(self, name):
+        self.__ftp.mkd(name)
+    
+    def cd(self, name):
+        self.__ftp.cwd(name)

@@ -5,7 +5,7 @@ from base.Model import BaseModel, DestinationModel, SourceModel, EventlogModel
 from flask.ext.login import UserMixin
 from base import Error
 from flask.ext.login import current_user
-import json
+import json, subprocess, os
 from lib import functions
 from datetime import datetime
 
@@ -39,6 +39,7 @@ class Profile(BaseModel):
     title = TextField()
     email_notify = IntegerField()
     compress = IntegerField()
+    split_size = IntegerField()
     
     def create(self, source, destination, option):
         
@@ -175,6 +176,7 @@ def profile_execute(p_id):
     source = data['source']
     destination = data['destination']
     data = data['profile']
+    split = int(data.get('split_size') or 0)
     
     """ Dumping from Source """
     SourceAct = import_string(source.get('provider') + '.model.SourceAct')
@@ -182,11 +184,24 @@ def profile_execute(p_id):
     file_name = src_act.dump_zipped()
     
     """ Output file name """
-    out = 'wb_' + functions.clean_str(data['title']) + datetime.utcnow().strftime('%Y_%m_%d_%H-%M-%S') + functions.ext_file(file_name)
+    dt_utc = datetime.utcnow().strftime('%Y_%m_%d_%H-%M-%S')
+    out = 'wb_' + functions.clean_str(data['title']) + dt_utc + functions.ext_file(file_name)
+    
+    if split > 0:
+        cmd = "split -b %sm %s /tmp/%s" % (split, file_name, out)
+        subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     """ Executing destination part  """
     DestinationAct = import_string(destination.get('provider') + '.model.DestinationAct')
     dst_act = DestinationAct(**destination)
-    dst_act.upload_file(file_name, out)
+    if split == 0:
+        dst_act.upload_file(file_name, out)
+    elif split > 0:
+        dst_act.mkdir(dt_utc)
+        dst_act.cd(dt_utc)
+        for f in os.listdir('/tmp'):
+            if f.startswith(out):
+                dst_act.upload_file('/tmp/%s' % f, f)
+        os.unlink(file_name)
     
     return data

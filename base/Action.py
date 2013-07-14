@@ -46,3 +46,9 @@ class DestinationAction(object):
     
     def upload_file(self, file_name):
         raise NotImplementedError("Should have implemented this")
+    
+    def mkdir(self, name):
+        raise NotImplementedError("Should have implemented this")
+    
+    def cd(self, name):
+        raise NotImplementedError("Should have implemented this")

@@ -12,3 +12,4 @@ class OptionForm(Form):
     opt_cron = TextField('Cron')
     opt_compress = BooleanField('Compress')
     opt_email_notify = BooleanField('Email')
+    opt_split_size = TextField('Split file')

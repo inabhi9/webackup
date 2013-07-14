@@ -6,7 +6,7 @@ CREATE TABLE "user" (
 CREATE TABLE sqlite_sequence(name,seq);
 CREATE TABLE source (id INTEGER PRIMARY KEY, u_id INTEGER, username TEXT, password TEXT, host TEXT, port INTEGER, extra TEXT, title TEXT, provider TEXT);
 CREATE TABLE destination (id INTEGER PRIMARY KEY, u_id INTEGER, username TEXT, password TEXT, host TEXT, port INTEGER, extra TEXT, title TEXT, provider TEXT);
-CREATE TABLE profile (id INTEGER PRIMARY KEY, u_id INTEGER, s_id INTEGER, d_id INTEGER, title TEXT, cron TEXT, compress INTEGER, email_notify INTEGER);
+CREATE TABLE profile (id INTEGER PRIMARY KEY, u_id INTEGER, s_id INTEGER, d_id INTEGER, title TEXT, cron TEXT, compress INTEGER, email_notify INTEGER, split_size INTEGER);
 CREATE TABLE event_log (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "type" TEXT,
