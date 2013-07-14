@@ -6,9 +6,9 @@ def aps_listener(event):
     
     if event.exception:
         rval = Profile().find_by_pk(int(event.job.name.replace('wj_', '')))['profile']
-        data = {'type' : 'error', 
-                'event': 'scheduled_run', 
-                'created_at' : event.scheduled_run_time, 
+        data = {'type' : 'error',
+                'event': 'scheduled_run',
+                'created_at' : event.scheduled_run_time,
                 'u_id': rval.get('u_id'),
                 'j_id':rval.get('id')
         }
@@ -16,9 +16,9 @@ def aps_listener(event):
         data['text'] = text
     else:
         rval = event.retval
-        data = {'type' : 'success', 
-                'event': 'scheduled_run', 
-                'created_at' : event.scheduled_run_time, 
+        data = {'type' : 'success',
+                'event': 'scheduled_run',
+                'created_at' : event.scheduled_run_time,
                 'u_id': rval.get('u_id'),
                 'j_id':rval.get('id')
         }

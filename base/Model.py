@@ -45,7 +45,7 @@ class DestinationModel(BaseModel):
 
 class EventlogModel(BaseModel):
     
-    id  = PrimaryKeyField()
+    id = PrimaryKeyField()
     type = TextField()
     text = TextField()
     created_at = TextField()

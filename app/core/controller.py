@@ -82,20 +82,20 @@ def profile_list():
 @register.route('/profile/do', methods=['GET'])
 @login_required
 def profil_actions():
-    act= request.args.get('act')
+    act = request.args.get('act')
     p_id = request.args.get('p_id')
     try:
-        if act=='active':
+        if act == 'active':
             schedule_job(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully activated')
-        elif act=='pause':
+        elif act == 'pause':
             unschedule_job(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Profile successfully paused')
-        elif act=='delete':
+        elif act == 'delete':
             unschedule_job(p_id)
             Profile().delete_by_pk(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Profile hase been deleted')
-        elif act=='run':
+        elif act == 'run':
             profile_execute(p_id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Job completed successfully')
         
@@ -124,9 +124,9 @@ def log():
 @register.route('/log/do')
 @login_required
 def log_action():
-    act= request.args.get('act')
+    act = request.args.get('act')
     try:
-        if act=='delete':
+        if act == 'delete':
             Eventlog().remove_all(current_user.id)
             return resp_format.from_dict(resp_format.MSG_OK, msg='Log has been deleted')
     except Exception, e:

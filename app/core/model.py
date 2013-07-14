@@ -94,7 +94,7 @@ class Profile(BaseModel):
 
         u_id = current_user.id
         
-        sq = Profile.select().where(Profile.u_id==u_id)
+        sq = Profile.select().where(Profile.u_id == u_id)
         qr = sq.execute()
         
         data = []
@@ -105,7 +105,7 @@ class Profile(BaseModel):
                 r._data['status'] = 0
             
             try:    
-                qe = EventlogModel.select().where(EventlogModel.j_id==r._data['id']).order_by(EventlogModel.id.desc()).limit(1)
+                qe = EventlogModel.select().where(EventlogModel.j_id == r._data['id']).order_by(EventlogModel.id.desc()).limit(1)
                 for res in qe.execute():
                     r._data['last_execute'] = res._data['created_at']
             except:
@@ -141,7 +141,7 @@ class Profile(BaseModel):
     def delete_by_pk(self, p_id):
         profile = Profile.get(Profile.id == p_id)
         source = SourceModel.get(SourceModel.id == profile.s_id)
-        destination = DestinationModel.get(DestinationModel.id==profile.d_id)
+        destination = DestinationModel.get(DestinationModel.id == profile.d_id)
         
         profile.delete_instance()
         source.delete_instance()
@@ -158,7 +158,7 @@ class Eventlog(EventlogModel):
     
         u_id = current_user.id
         
-        sq = EventlogModel.select().where(EventlogModel.u_id==u_id).order_by(EventlogModel.id.desc())
+        sq = EventlogModel.select().where(EventlogModel.u_id == u_id).order_by(EventlogModel.id.desc())
         qr = sq.execute()
         
         data = []

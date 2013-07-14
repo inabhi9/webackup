@@ -43,8 +43,8 @@ class SourceAct(SourceAction):
         """
         self._validate(SettingForm)
 
-        username = "-u '"+self.src_username+"'" if self.src_username else ''
-        passwd = "-p '"+self.src_password+"'" if self.src_password else ''
+        username = "-u '" + self.src_username + "'" if self.src_username else ''
+        passwd = "-p '" + self.src_password + "'" if self.src_password else ''
         cmd = "mongo --host %s --port %s %s %s --eval exitme" % (self.src_host, self.src_port, username, passwd)
 
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -56,10 +56,10 @@ class SourceAct(SourceAction):
         dpath = '/tmp/%s' % functions.id_generator(10)
         fpath = "/tmp/wb_%s.tar.gz" % functions.id_generator(10)
         
-        db = '--db '+self.extra['db'] if self.extra['db'] else ''
-        col = '--collection '+self.extra['coll'] if self.extra['coll'] else ''
-        username = "-u '"+self.username+"'" if self.username else ''
-        passwd = "-p '"+self.password+"'" if self.password else ''
+        db = '--db ' + self.extra['db'] if self.extra['db'] else ''
+        col = '--collection ' + self.extra['coll'] if self.extra['coll'] else ''
+        username = "-u '" + self.username + "'" if self.username else ''
+        passwd = "-p '" + self.password + "'" if self.password else ''
         cmd = "mongodump --host %s --port %s %s %s %s %s -o %s" % (self.host, self.port, username, passwd, db, col, dpath)
 
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

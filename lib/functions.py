@@ -6,7 +6,7 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 def ext_file(file_name):
     h, t = os.path.split(file_name)
     try:
-        return '.'+t.split('.', 1)[1]
+        return '.' + t.split('.', 1)[1]
     except IndexError:
         return ''
     
