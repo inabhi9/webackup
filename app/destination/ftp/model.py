@@ -38,10 +38,13 @@ class DestinationAct(DestinationAction):
     
     def __init__(self, **kwargs):
         super(DestinationAct, self).__init__(**kwargs)
-        self.__ftp = FTP()
-        self.__ftp.connect(host=self.host, port=int(self.port))
-        self.__ftp.login(user=self.username, passwd=self.password)
-        self.__ftp.cwd(self.extra['path'])
+        try:
+            self.__ftp = FTP()
+            self.__ftp.connect(host=self.host, port=int(self.port))
+            self.__ftp.login(user=self.username, passwd=self.password)
+            self.__ftp.cwd(self.extra['path'])
+        except:
+            pass
         
     def test_config(self):
         """
