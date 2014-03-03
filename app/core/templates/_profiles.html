@@ -1,0 +1,25 @@
+{% for profile in profiles %}
+	{% if profile.status == 1 %}
+		{% set cls="success" %}
+		{% set lbl="Active" %}
+		{% set actPP = '<a href="javascript:void(0)" data-id="'~profile.id~'" class="btn btn-inverse btn_prof_pause" id="btn_prof_pause_'~profile.id~'"><i class="icon-white icon-pause"></i> Pause</a>' %}
+	{% endif %}
+	{% if profile.status == 0 %}
+		{% set cls="warning" %}
+		{% set lbl="Deactive" %}
+		{% set actPP = '<a href="javascript:void(0)" data-id="'~profile.id~'" class="btn btn-inverse btn_prof_active" id="btn_prof_active_'~profile.id~'"><i class="icon-white icon-play"></i> ReActive</a>' %}
+	{% endif %}
+	<tr id="row_{{profile.id}}">
+		<td>{{profile.id}}</td>
+		<td width="300px">{{profile.title}}</td>
+		<td id="row_status_{{profile.id}}"><span class="label label-{{cls}}">{{lbl}}</span></td>
+		<td>{{profile.cron}}</td>
+		
+		<td>{% if profile.last_execute %} {{profile.last_execute}} {% else %} Never {% endif %}</td>
+		<td id='row_actions_{{profile.id}}'>
+			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn btn-primary btn_prof_run"><i class="icon-repeat icon-white"></i> Run</a>
+			{{actPP|safe}}
+			<a href="javascript:void(0)" data-id="{{profile.id}}" class="btn btn-danger btn_prof_delete"><i class="icon-trash icon-white"></i> Delete</a>
+		</td>
+	</tr>
+{% endfor %}

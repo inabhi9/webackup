@@ -1,0 +1,24 @@
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+{% include 'ajax_base.html' %}
+
+<div class='elements'>
+	<form class="form-signin" method="POST" id='dst_conf_form'>
+		{{ wtf.form_errors(form, "only") }}
+		{{form.dst_ex_path(placeholder="Enter path to store backup file")}}
+		{{form.dst_host(placeholder="Host")}}
+		{{form.dst_port(placeholder="Port")}}
+		{{form.dst_username(placeholder="Username")}}
+		{{form.dst_password(placeholder="password")}} 
+	</form>
+	
+	<div id='dst-alert-display'></div>
+</div>
+
+<hr />
+<button class="btn btn-inverse btn-testconfig" type="button" id='bnt_dst_test_config'>Test config</button>
+<button class="btn btn-back" type="button" id='dst_back_btn'>Back</button>
+
+{% include '_dst_common.html' %}
+{% endblock %}

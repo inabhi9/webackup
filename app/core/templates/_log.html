@@ -1,0 +1,14 @@
+{% for log in logs %}
+	{% if log.type == 'success' %}
+		{% set cls="success" %}
+	{% endif %}
+	{% if log.type == 'error' %}
+		{% set cls="error" %}
+	{% endif %}
+	<tr>
+		<td width='80px'>#{{log.j_id}}</td>
+		<td width='170px'>{{log.created_at}}</td>
+		<td  width='90px'><span class="label label-{{cls}}">{{log.type}}</span></td>
+		<td>{{log.text}}</td>
+	</tr>
+{% endfor %}

@@ -15,7 +15,6 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
 lib64
 __pycache__
 
@@ -39,3 +38,5 @@ nosetests.xml
 
 #database
 database.db
+scheduler.db
+/__test.py

@@ -1,0 +1,7 @@
+{% for destination in destinations %}
+<div class="items img-rounded img-polaroid">
+	<a href="javascript:void(0)" data-url="{{destination.config_url}}" data-provider="{{destination.id}}"  data-container='destination_container' class='src_dst_object' title="{{destination.title}}">
+		<img src="{{destination.icon}}" style="width: auto; height: 70px;">
+	</a>
+</div>
+{% endfor %}
